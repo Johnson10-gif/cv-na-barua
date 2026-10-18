@@ -1,0 +1,56 @@
+/* paper.css
+   The A4 sheet that shows the CV or letter, and its two templates.
+   The whole sheet scales with its container width (cqw), so it looks the
+   same proportionally on a phone and on a desktop. */
+
+.sheet{max-width:794px;margin:0 auto;container-type:inline-size}
+
+.paper{
+  background:var(--paper);color:var(--ink);
+  font-size:calc(100cqw / 60);line-height:1.45;
+  padding:4.2em 4.4em;min-height:calc(100cqw * 1.414);
+  box-shadow:0 1px 2px rgba(0,0,0,.10),0 10px 32px rgba(0,0,0,.10);
+  border-radius:2px;overflow-wrap:anywhere;
+}
+.paper p{margin:0}
+.paper ul{margin:.3em 0 0;padding-left:1.3em}
+.paper li{margin:.12em 0}
+.paper .empty{color:#9a9a9a}
+
+/* ---------- CV content ---------- */
+.cv .kicker{font-size:.78em;letter-spacing:.2em;color:#6b6b6b;margin-bottom:.5em}
+.cv .nm{margin:0;font-size:2.35em;line-height:1.1;font-weight:700}
+.cv .rl{margin-top:.35em;font-size:1.12em}
+.cv .contacts{margin-top:.7em;display:flex;flex-wrap:wrap;gap:.1em .9em;font-size:.95em;color:#333}
+.cv .contacts span+span::before{content:"|";margin-right:.9em;color:#aaa}
+.cv .details{margin-top:.25em;font-size:.92em;color:#555}
+.cv h3{margin:1.5em 0 .6em;font-size:.88em;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding-bottom:.28em}
+.cv .ent{margin:0 0 .85em}
+.cv .eh{display:flex;justify-content:space-between;gap:1em;flex-wrap:wrap}
+.cv .eh b{font-weight:600}
+.cv .pr{font-size:.93em;color:#555;font-variant-numeric:tabular-nums}
+.cv .es{font-style:italic;color:#444}
+.cv .refs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8em 1.6em}
+.cv .rf div{font-size:.95em;color:#333}
+.cv .rf b{font-weight:600}
+
+/* ---------- Template: Classic (serif, centred, black) ---------- */
+.t-classic{font-family:var(--font-doc);font-size:calc(100cqw / 58)}
+.t-classic .kicker,.t-classic .nm,.t-classic .rl,.t-classic .contacts,.t-classic .details{text-align:center}
+.t-classic .contacts{justify-content:center}
+.t-classic .nm{font-weight:600;letter-spacing:.01em}
+.t-classic h3{border-bottom:1px solid #8c8c8c}
+
+/* ---------- Template: Modern (sans, left aligned, accent colour) ---------- */
+.t-modern{font-family:var(--font-ui)}
+.t-modern .nm{color:var(--doc-accent)}
+.t-modern h3{color:var(--doc-accent);border-bottom:2px solid var(--doc-accent)}
+.t-modern .rl{font-weight:600}
+
+/* ---------- Letter content ---------- */
+.lt .blk{margin:0 0 1em}
+.lt .blk.tight{margin-bottom:.35em}
+.lt .sub{font-weight:700;text-decoration:underline;text-underline-offset:.2em;margin:1.2em 0 1em}
+.lt .sig{height:3.6em}
+.lt .encl{margin-top:2.2em;font-size:.92em}
+.lt .encl ul{margin-top:.2em}

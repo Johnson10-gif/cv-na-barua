@@ -1,0 +1,49 @@
+/* layout.css
+   Page structure: header, tabs, the two-pane grid and the phone pane switch.
+   Wide screens show form and preview side by side.
+   Phones show one pane at a time (data-pane on #app) and a floating switch button. */
+
+.wrap{max-width:1240px;margin:0 auto}
+
+/* header */
+.top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px}
+.brand{display:flex;gap:12px;align-items:center;min-width:0}
+.brand svg{flex:none;color:var(--accent)}
+.tag{margin:2px 0 0;color:var(--muted);font-size:13.5px;max-width:52ch;text-wrap:balance}
+
+/* tabs: CV / Letter */
+.tabs{display:flex;gap:6px;border-bottom:1px solid var(--line);margin-bottom:18px;overflow-x:auto}
+.tabs button{border:0;background:transparent;padding:10px 14px;cursor:pointer;font-weight:600;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--fg);border-bottom-color:var(--accent)}
+
+/* two panes */
+.app{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+.app[data-pane="edit"] .view{display:none}
+.app[data-pane="preview"] .edit{display:none}
+
+.edit{min-width:0;display:flex;flex-direction:column;gap:12px}
+.panel{display:flex;flex-direction:column;gap:12px}
+.view{min-width:0}
+
+@media (min-width:920px){
+  .app{grid-template-columns:minmax(360px,470px) minmax(0,1fr)}
+  .app[data-pane] .edit{display:flex}
+  .app[data-pane] .view{display:block}
+  .view{position:sticky;top:16px;align-self:start;max-height:calc(100vh - 32px);overflow:auto;padding-right:2px}
+  .flip{display:none!important}
+}
+
+/* floating pane switch (phones) */
+.flip{
+  position:fixed;
+  right:max(16px,env(safe-area-inset-right,0px));
+  bottom:calc(16px + env(safe-area-inset-bottom,0px));
+  z-index:5;
+  background:var(--accent);color:var(--accent-fg);
+  border:0;border-radius:999px;padding:12px 20px;font-weight:700;
+  box-shadow:0 6px 20px rgba(0,0,0,.25);cursor:pointer;
+}
+
+/* preview toolbar */
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+.bar .grow{flex:1;min-width:0;font-size:13px;color:var(--muted)}

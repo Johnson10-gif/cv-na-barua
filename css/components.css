@@ -1,0 +1,59 @@
+/* components.css
+   Reusable UI pieces: segmented control, buttons, form groups, fields,
+   repeatable items, swatches, notices and the toast. */
+
+/* segmented control (language, template, letter type) */
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;background:var(--surface);padding:3px;gap:2px}
+.seg-wrap{align-self:flex-start;flex-wrap:wrap}
+.seg button{border:0;background:transparent;padding:6px 12px;border-radius:7px;cursor:pointer;font-weight:600;font-size:14px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-fg)}
+
+/* buttons */
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:9px 14px;font-weight:600;cursor:pointer;font-size:14.5px}
+.btn:hover{border-color:var(--accent)}
+.btn.pri{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn.rm{color:var(--danger)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* notices */
+.note{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;background:var(--accent-soft);border-radius:10px;padding:10px 14px;font-size:14px}
+.dirty{background:var(--accent-soft);border-radius:8px;padding:8px 12px;font-size:13px}
+.hint{margin:0;font-size:13px;color:var(--muted)}
+
+/* collapsible form groups */
+.grp{background:var(--surface);border:1px solid var(--line);border-radius:12px}
+.grp>summary{list-style:none;cursor:pointer;padding:13px 16px;font-weight:700;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.grp>summary::-webkit-details-marker{display:none}
+.grp>summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);transition:transform .15s;margin-right:4px}
+.grp[open]>summary::after{transform:rotate(-135deg)}
+.grp .body{padding:2px 16px 16px;display:flex;flex-direction:column;gap:12px}
+.grp .body.flush{padding:0}
+
+/* fields */
+.cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:520px){.cols{grid-template-columns:minmax(0,1fr)}}
+.fld{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fld>span{font-size:13px;font-weight:600;color:var(--muted)}
+.fld input,.fld textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:9px 11px;font-size:16px;line-height:1.4;resize:vertical;min-width:0}
+.fld input:focus,.fld textarea:focus{border-color:var(--accent)}
+
+/* repeatable items (education, experience, referees) */
+.item{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px;background:color-mix(in srgb,var(--bg) 55%,var(--surface))}
+.item-h{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:var(--muted)}
+
+/* accent colour swatches (Modern template) */
+.swatches{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.sw{width:30px;height:30px;border-radius:50%;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+.sw[aria-pressed="true"]{box-shadow:0 0 0 2px var(--fg)}
+
+/* toast */
+.toast{
+  position:fixed;left:50%;transform:translate(-50%,20px);
+  bottom:calc(76px + env(safe-area-inset-bottom,0px));
+  background:var(--fg);color:var(--bg);
+  padding:10px 16px;border-radius:10px;font-size:14px;
+  opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;
+  z-index:9;max-width:calc(100vw - 32px);
+}
+.toast.on{opacity:1;transform:translate(-50%,0)}

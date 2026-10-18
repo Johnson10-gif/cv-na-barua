@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="sw">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>CV na Barua</title>
+  <meta name="description" content="Tengeneza CV na barua ya maombi ya kazi, mafunzo kwa vitendo au kujitolea, kwa Kiswahili au Kiingereza.">
+
+  <!-- Fonts (Google Fonts) -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap">
+
+  <!-- Styles: order matters (tokens first, then layout, components, paper) -->
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/paper.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg width="34" height="34" viewBox="0 0 34 34" fill="none" aria-hidden="true"><path d="M8 3h13l7 7v21H8V3z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M21 3v7h7" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13 17h10M13 22h10M13 27h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      <div><h1>CV na Barua</h1><p class="tag" data-t="tag"></p></div>
+    </div>
+    <div class="seg" role="group" aria-label="Lugha / Language">
+      <button type="button" id="lang-sw" data-lang="sw">Kiswahili</button>
+      <button type="button" id="lang-en" data-lang="en">English</button>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button type="button" role="tab" id="tab-cv" data-tab="cv" data-t="tabCv"></button>
+    <button type="button" role="tab" id="tab-letter" data-tab="letter" data-t="tabLetter"></button>
+  </div>
+
+  <div class="app" id="app" data-pane="edit">
+
+    <!-- ========== Left: forms ========== -->
+    <section class="edit" id="edit">
+      <div class="note" id="exNote">
+        <span data-t="exMsg"></span>
+        <button type="button" class="btn sm" id="exClear" data-t="exClear"></button>
+      </div>
+
+      <!-- CV form -->
+      <div class="panel" id="panel-cv">
+        <details class="grp" open>
+          <summary data-t="gPersonal"></summary>
+          <div class="body">
+            <label class="fld"><span data-t="fName"></span><input id="f-cv-name" data-k="cv.name" autocomplete="name"></label>
+            <label class="fld"><span data-t="fRole"></span><input id="f-cv-role" data-k="cv.role"></label>
+            <div class="cols">
+              <label class="fld"><span data-t="fPhone"></span><input id="f-cv-phone" data-k="cv.phone" inputmode="tel" autocomplete="tel"></label>
+              <label class="fld"><span data-t="fEmail"></span><input id="f-cv-email" data-k="cv.email" inputmode="email" autocomplete="email"></label>
+            </div>
+            <label class="fld"><span data-t="fAddress"></span><input id="f-cv-address" data-k="cv.address" autocomplete="street-address"></label>
+            <div class="cols">
+              <label class="fld"><span data-t="fDob"></span><input id="f-cv-dob" data-k="cv.dob"></label>
+              <label class="fld"><span data-t="fNat"></span><input id="f-cv-nat" data-k="cv.nat"></label>
+            </div>
+            <label class="fld"><span data-t="fLink"></span><input id="f-cv-link" data-k="cv.link"></label>
+          </div>
+        </details>
+
+        <details class="grp" open>
+          <summary data-t="gSummary"></summary>
+          <div class="body">
+            <label class="fld"><span data-t="fSummary"></span><textarea id="f-cv-summary" data-k="cv.summary" rows="4"></textarea></label>
+            <div class="row"><button type="button" class="btn" id="btnSuggest"></button></div>
+            <p class="hint" data-t="hSummary"></p>
+          </div>
+        </details>
+
+        <details class="grp" open>
+          <summary data-t="gEdu"></summary>
+          <div class="body">
+            <div id="eduList" class="body flush"></div>
+            <div class="row"><button type="button" class="btn" id="addEdu" data-t="addEdu"></button></div>
+            <p class="hint" data-t="hEdu"></p>
+          </div>
+        </details>
+
+        <details class="grp" open>
+          <summary data-t="gExp"></summary>
+          <div class="body">
+            <div id="expList" class="body flush"></div>
+            <div class="row"><button type="button" class="btn" id="addExp" data-t="addExp"></button></div>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary data-t="gSkills"></summary>
+          <div class="body">
+            <label class="fld"><span data-t="fSkills"></span><textarea id="f-cv-skills" data-k="cv.skills" rows="3" data-ph="phSkills"></textarea></label>
+            <label class="fld"><span data-t="fLangs"></span><input id="f-cv-langs" data-k="cv.langs" data-ph="phLangs"></label>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary data-t="gExtras"></summary>
+          <div class="body">
+            <label class="fld"><span data-t="fExtras"></span><textarea id="f-cv-extras" data-k="cv.extras" rows="3"></textarea></label>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary data-t="gRefs"></summary>
+          <div class="body">
+            <p class="hint" data-t="hRefs"></p>
+            <div id="refList" class="body flush"></div>
+            <div class="row"><button type="button" class="btn" id="addRef" data-t="addRef"></button></div>
+          </div>
+        </details>
+
+        <details class="grp">
+          <summary data-t="gLook"></summary>
+          <div class="body">
+            <div class="seg" role="group" aria-label="Template">
+              <button type="button" id="tpl-classic" data-set="template" data-val="classic" data-t="lookClassic"></button>
+              <button type="button" id="tpl-modern" data-set="template" data-val="modern" data-t="lookModern"></button>
+            </div>
+            <div class="swatches" id="swatches"></div>
+          </div>
+        </details>
+      </div>
+
+      <!-- Letter form -->
+      <div class="panel" id="panel-letter" hidden>
+        <details class="grp" open>
+          <summary data-t="lType"></summary>
+          <div class="body">
+            <div class="seg seg-wrap" role="group" aria-label="Type">
+              <button type="button" id="type-job" data-set="letter.type" data-val="job" data-t="tJob"></button>
+              <button type="button" id="type-attach" data-set="letter.type" data-val="attach" data-t="tAttach"></button>
+              <button type="button" id="type-vol" data-set="letter.type" data-val="vol" data-t="tVol"></button>
+            </div>
+            <p class="hint" data-t="hSender"></p>
+            <div class="row"><button type="button" class="btn sm" id="goCv" data-t="goCv"></button></div>
+          </div>
+        </details>
+
+        <details class="grp" open>
+          <summary data-t="gRecipient"></summary>
+          <div class="body">
+            <label class="fld"><span data-t="lRecTitle"></span><input id="f-l-rec" data-k="letter.recTitle" data-ph="phRec"></label>
+            <label class="fld"><span data-t="lOrg"></span><input id="f-l-org" data-k="letter.org"></label>
+            <label class="fld"><span data-t="lOrgAddr"></span><textarea id="f-l-addr" data-k="letter.orgAddr" rows="2"></textarea></label>
+            <label class="fld"><span id="lbl-pos"></span><input id="f-l-pos" data-k="letter.position"></label>
+            <label class="fld" id="wrap-source"><span data-t="lSource"></span><input id="f-l-source" data-k="letter.source" data-ph="phSource"></label>
+            <label class="fld"><span id="lbl-when"></span><input id="f-l-when" data-k="letter.when"></label>
+            <label class="fld"><span data-t="lDate"></span><input id="f-l-date" type="date" data-k="letter.date"></label>
+          </div>
+        </details>
+
+        <details class="grp" open>
+          <summary data-t="gContent"></summary>
+          <div class="body">
+            <label class="fld"><span data-t="lStrengths"></span><textarea id="f-l-strengths" data-k="letter.strengths" rows="4"></textarea></label>
+            <p class="hint" data-t="hStrengths"></p>
+            <label class="fld"><span data-t="lWhy"></span><textarea id="f-l-why" data-k="letter.why" rows="3"></textarea></label>
+          </div>
+        </details>
+
+        <details class="grp" open>
+          <summary data-t="gBody"></summary>
+          <div class="body">
+            <label class="fld"><span data-t="hBody"></span><textarea id="f-body" rows="14"></textarea></label>
+            <div class="dirty" id="dirtyNote" hidden data-t="hDirty"></div>
+            <div class="row"><button type="button" class="btn" id="btnRegen" data-t="btnRegen"></button></div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ========== Right: live A4 preview ========== -->
+    <section class="view" id="view">
+      <div class="bar">
+        <button type="button" class="btn pri" id="btnPdf" data-t="dlPdf"></button>
+        <button type="button" class="btn" id="btnCopy" data-t="copy"></button>
+        <span class="grow" data-t="hPdf"></span>
+      </div>
+      <div class="sheet"><div class="paper" id="paper"></div></div>
+    </section>
+  </div>
+</div>
+
+<button type="button" class="flip" id="flip"></button>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- PDF library (CDN). For fully offline use, download it into vendor/ and change this path. -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<!-- App scripts: load order matters, each file only uses files above it -->
+<script src="js/config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/examples.js"></script>
+<script src="js/state.js"></script>
+<script src="js/models.js"></script>
+<script src="js/letter-generator.js"></script>
+<script src="js/preview.js"></script>
+<script src="js/export-text.js"></script>
+<script src="js/export-pdf.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/actions.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

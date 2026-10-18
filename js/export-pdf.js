@@ -1,0 +1,236 @@
+/* export-pdf.js
+   Builds real, selectable-text PDFs on A4 with the jsPDF library.
+   Layout is drawn by hand from the same models as the preview, and pages
+   break automatically when the content is long.
+
+   createPdf()    -> a jsPDF document for the current tab (CV or letter)
+   pdfFileName()  -> e.g. "CV_Neema-Joseph-Mushi.pdf"
+*/
+
+(function () {
+  'use strict';
+
+  const { hex, slug } = CVB.utils;
+  const { tr } = CVB.i18n;
+  const { state } = CVB.store;
+  const { cvModel, letterModel } = CVB.models;
+
+  /* ---- tiny layout helper: tracks the cursor (y) and starts new pages ---- */
+  function pdfBuilder(doc, M) {
+    const W = doc.internal.pageSize.getWidth();
+    const H = doc.internal.pageSize.getHeight();
+    const b = { W, H, M, cw: W - 2 * M, y: M };
+
+    // make sure `h` points of space are left on the page, otherwise start a new one
+    b.need = h => { if (b.y + h > H - M) { doc.addPage(); b.y = M; } };
+
+    // wrapped paragraph; returns the wrapped lines
+    b.para = (s, o) => {
+      o = o || {};
+      const size = o.size || 10, font = o.font || 'helvetica', style = o.style || 'normal';
+      const x = o.x == null ? M : o.x, w = o.w || b.cw, lh = o.lh || 1.4, color = o.color || [22, 22, 22];
+      doc.setFont(font, style);
+      doc.setFontSize(size);
+      doc.setTextColor(color[0], color[1], color[2]);
+      const ls = doc.splitTextToSize(String(s), w);
+      ls.forEach(l => {
+        b.need(size * lh);
+        if (o.align === 'center') doc.text(l, x + w / 2, b.y + size * 0.8, { align: 'center' });
+        else doc.text(l, x, b.y + size * 0.8);
+        b.y += size * lh;
+      });
+      return ls;
+    };
+
+    // bullet with a drawn dot (no special characters, so every font works)
+    b.bullet = (s, o) => {
+      o = o || {};
+      const size = o.size || 10, font = o.font || 'helvetica', lh = 1.4, indent = 14, off = o.x || 0;
+      doc.setFont(font, 'normal');
+      doc.setFontSize(size);
+      const ls = doc.splitTextToSize(String(s), b.cw - indent - off);
+      b.need(size * lh);
+      doc.setFillColor(40, 40, 40);
+      doc.circle(M + off + 4, b.y + size * 0.55, 1.4, 'F');
+      doc.setTextColor(22, 22, 22);
+      ls.forEach((l, i) => {
+        if (i > 0) b.need(size * lh);
+        doc.text(l, M + off + indent, b.y + size * 0.8);
+        b.y += size * lh;
+      });
+    };
+
+    return b;
+  }
+
+  /* ---------------------------- CV ---------------------------- */
+  function pdfCv(doc) {
+    const m = cvModel(), modern = state.template === 'modern';
+    const b = pdfBuilder(doc, 50), M = b.M, cw = b.cw, W = b.W;
+    const acc = modern ? hex(state.accent) : [22, 22, 22];
+    const f = modern ? 'helvetica' : 'times';
+    const center = !modern;
+    const align = center ? 'center' : 'left';
+
+    // header
+    b.para(m.kicker, { size: 7.5, font: 'helvetica', color: [110, 110, 110], align });
+    b.y += 2;
+    b.para(m.name || tr().emptyName, { size: 25, font: f, style: 'bold', color: modern ? acc : [22, 22, 22], align, lh: 1.2 });
+    if (m.role) { b.y += 2; b.para(m.role, { size: 11.5, font: f, style: modern ? 'bold' : 'normal', align }); }
+    if (m.contacts.length) { b.y += 5; b.para(m.contacts.join('   |   '), { size: 9.5, font: f, color: [50, 50, 50], align }); }
+    if (m.details.length) b.para(m.details.join('   |   '), { size: 9, font: f, color: [90, 90, 90], align });
+
+    // section heading with a rule under it
+    function heading(title) {
+      b.y += 12;
+      b.need(34);
+      doc.setFont(f, 'bold');
+      doc.setFontSize(10);
+      doc.setTextColor(acc[0], acc[1], acc[2]);
+      doc.text(title.toUpperCase(), M, b.y + 8);
+      b.y += 13;
+      if (modern) { doc.setDrawColor(acc[0], acc[1], acc[2]); doc.setLineWidth(1.2); }
+      else        { doc.setDrawColor(140, 140, 140);          doc.setLineWidth(0.6); }
+      doc.line(M, b.y, W - M, b.y);
+      b.y += 8;
+    }
+
+    m.sections.forEach(s => {
+      heading(s.title);
+
+      if (s.kind === 'text') {
+        b.para(s.text, { size: 10, font: f });
+
+      } else if (s.kind === 'bullets') {
+        s.items.forEach(i => b.bullet(i, { font: f }));
+
+      } else if (s.kind === 'entries') {
+        s.items.forEach(it => {
+          b.need(40);
+          // measure the right-hand period so the title wraps before it
+          let rw = 0;
+          if (it.right) { doc.setFont(f, 'normal'); doc.setFontSize(9.5); rw = doc.getTextWidth(it.right) + 12; }
+          doc.setFont(f, 'bold');
+          doc.setFontSize(10.5);
+          const ls = doc.splitTextToSize(it.head, cw - rw);
+          ls.forEach((l, i) => {
+            b.need(15);
+            doc.setFont(f, 'bold'); doc.setFontSize(10.5); doc.setTextColor(22, 22, 22);
+            doc.text(l, M, b.y + 9);
+            if (i === 0 && it.right) {
+              doc.setFont(f, 'normal'); doc.setFontSize(9.5); doc.setTextColor(85, 85, 85);
+              doc.text(it.right, W - M, b.y + 9, { align: 'right' });
+            }
+            b.y += 14.5;
+          });
+          if (it.sub) b.para(it.sub, { size: 10, font: f, style: 'italic', color: [70, 70, 70] });
+          it.bullets.forEach(x => b.bullet(x, { font: f }));
+          b.y += 7;
+        });
+
+      } else if (s.kind === 'refs') {
+        // two referees per row
+        const colW = (cw - 24) / 2;
+        for (let i = 0; i < s.items.length; i += 2) {
+          const pair = s.items.slice(i, i + 2);
+          const rows = pair.map(r => {
+            const arr = [];
+            if (r.name) arr.push({ t: r.name, bold: true });
+            if (r.title) {
+              doc.setFont(f, 'normal'); doc.setFontSize(9.5);
+              doc.splitTextToSize(r.title, colW).forEach(l => arr.push({ t: l, bold: false }));
+            }
+            r.contact.forEach(x => arr.push({ t: x, bold: false }));
+            return arr;
+          });
+          const rowH = Math.max.apply(null, rows.map(a => a.length)) * 13;
+          b.need(rowH + 6);
+          rows.forEach((arr, j) => {
+            arr.forEach((ln, k) => {
+              doc.setFont(f, ln.bold ? 'bold' : 'normal');
+              doc.setFontSize(ln.bold ? 10 : 9.5);
+              const g = ln.bold ? 22 : 55;
+              doc.setTextColor(g, g, g);
+              doc.text(ln.t, M + j * (colW + 24), b.y + 9 + k * 13);
+            });
+          });
+          b.y += rowH + 8;
+        }
+      }
+    });
+  }
+
+  /* --------------------------- Letter --------------------------- */
+  function pdfLetter(doc) {
+    const m = letterModel(), modern = state.template === 'modern';
+    const b = pdfBuilder(doc, 64), M = b.M;
+    const f = modern ? 'helvetica' : 'times';
+    const size = modern ? 10.5 : 11.5;
+
+    // sender block, date, recipient, salutation
+    m.sender.forEach((x, i) => b.para(x, {
+      size, font: f, style: i === 0 ? 'bold' : 'normal',
+      color: i === 0 && modern ? hex(state.accent) : [22, 22, 22]
+    }));
+    b.y += 12; b.para(m.date, { size, font: f });
+    b.y += 12; m.recipient.forEach(x => b.para(x, { size, font: f }));
+    b.y += 12; b.para(m.salutation, { size, font: f });
+    b.y += 12;
+
+    // subject line, bold and underlined
+    const sl = b.para(m.subject, { size, font: f, style: 'bold' });
+    (function underline() {
+      const lh = size * 1.4, top = b.y - lh * sl.length;
+      if (top < M - 1 || b.y > b.H - M + 1) return;   // subject crossed a page break: skip the underline
+      doc.setDrawColor(22, 22, 22);
+      doc.setLineWidth(0.6);
+      doc.setFont(f, 'bold');
+      doc.setFontSize(size);
+      sl.forEach((l, i) => {
+        const w = doc.getTextWidth(l);
+        const y2 = top + i * lh + size * 0.8 + 2;
+        doc.line(M, y2, M + w, y2);
+      });
+    })();
+    b.y += 10;
+
+    // body
+    m.blocks.forEach((blk, i) => {
+      const next = m.blocks[i + 1];
+      if (blk.type === 'p') {
+        blk.lines.forEach(l => b.para(l, { size, font: f, lh: 1.45 }));
+        b.y += (next && next.type === 'ul') ? 3 : 10;
+      } else {
+        blk.items.forEach(x => b.bullet(x, { size, font: f, x: 6 }));
+        b.y += 10;
+      }
+    });
+
+    // closing, signature space, name, enclosures
+    b.need(110);
+    b.para(m.closing, { size, font: f });
+    b.y += 40;
+    b.para(m.name || '', { size, font: f, style: 'bold' });
+    b.y += 16;
+    b.need(20 + m.encl.length * 14);
+    b.para(m.enclTitle + ':', { size: size - 1, font: f, style: 'bold' });
+    m.encl.forEach(x => b.bullet(x, { size: size - 1, font: f, x: 6 }));
+  }
+
+  /* ---------------------------- API ---------------------------- */
+  function createPdf() {
+    const lib = window.jspdf;
+    if (!lib || !lib.jsPDF) throw new Error('jsPDF is not loaded');
+    const doc = new lib.jsPDF({ unit: 'pt', format: 'a4', compress: true });
+    if (state.tab === 'cv') pdfCv(doc); else pdfLetter(doc);
+    return doc;
+  }
+
+  function pdfFileName() {
+    const who = slug(state.cv.name) || 'Jina';
+    const kind = state.tab === 'cv' ? 'CV' : (state.lang === 'sw' ? 'Barua' : 'Cover-letter');
+    return kind + '_' + who + '.pdf';
+  }
+
+  CVB.exportPdf = { createPdf, pdfFileName };
+})();
