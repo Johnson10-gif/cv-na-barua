@@ -20,6 +20,11 @@
     return parts.map((line, i) => line.replace(/[.,;:]+$/, '') + (i === parts.length - 1 ? '.' : ','));
   }
 
+  function addressLines(value) {
+    return String(value || '').split(/[\r\n,]+/).map(x => x.trim()).filter(Boolean)
+      .map(line => line.replace(/[.,;:]+$/, '') + ',');
+  }
+
   // "2026-10-18" -> "18 Oktoba 2026" / "18 October 2026"
   function fmtDate(iso) {
     let d = iso ? iso.split('-') : null;
@@ -102,11 +107,10 @@
   function letterModel() {
     const c = state.cv, l = state.letter, D = DOC[state.lang];
 
-    const contactLine = [c.phone ? D.tel + ': ' + c.phone.trim() : '', c.email ? D.mail + ': ' + c.email.trim() : '']
-      .filter(Boolean).join(', ');
+    const date = fmtDate(l.date);
     const sender = [(c.name || '').trim()]
-      .concat(punctuatedLines(c.address))
-      .concat(contactLine ? [contactLine + '.'] : [])
+      .concat(addressLines(c.address))
+      .concat(date)
       .filter(Boolean);
 
     const title = (l.recTitle || '').trim() || D.defTitle;
@@ -114,7 +118,7 @@
 
     return {
       sender,
-      date: fmtDate(l.date),
+      date,
       recipient,
       salutation: D.dear(title),
       subject: D.subj[l.type]((l.position || '').trim()),

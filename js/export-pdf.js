@@ -221,7 +221,6 @@
       align: format.senderAlign,
       color: [22, 22, 22]
     }));
-    b.y += format.addressGap; b.para(m.date, { size, font: f, align: format.dateAlign });
     b.y += format.addressGap; m.recipient.forEach(x => b.para(x, { size, font: f, align: format.recipientAlign }));
     b.y += format.addressGap; b.para(m.salutation, { size, font: f });
     b.y += format.salutationGap;

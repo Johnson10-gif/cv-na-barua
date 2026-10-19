@@ -65,7 +65,6 @@
     if (m.sender.length) {
       h += '<div class="blk sender align-' + format.senderAlign + '">' + m.sender.map((x, i) => '<div>' + (i === 0 ? '<b>' + esc(x) + '</b>' : esc(x)) + '</div>').join('') + '</div>';
     }
-    h += '<div class="blk letter-date align-' + format.dateAlign + '">' + esc(m.date) + '</div>';
     h += '<div class="blk recipient align-' + format.recipientAlign + '">' + m.recipient.map(x => '<div>' + esc(x) + '</div>').join('') + '</div>';
     h += '<div class="blk">' + esc(m.salutation) + '</div>';
     h += '<div class="sub align-' + format.subjectAlign + (format.subjectUnderline ? ' underlined' : '') + '">' + esc(m.subject) + '</div>';

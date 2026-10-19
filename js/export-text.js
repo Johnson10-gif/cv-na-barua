@@ -53,7 +53,7 @@
     let out = [];
 
     out = out.concat(m.sender);
-    out.push('', m.date, '');
+    out.push('');
     out = out.concat(m.recipient);
     out.push('', m.salutation, '', m.subject, '');
 
