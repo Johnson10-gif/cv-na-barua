@@ -44,6 +44,7 @@
       gRecipient: 'Unamwandikia nani', lRecTitle: 'Cheo cha mpokeaji (hiari)', phRec: 'Meneja Rasilimali Watu',
       lOrg: 'Taasisi au kampuni', lOrgAddr: 'Anwani ya taasisi',
       lPosJob: 'Nafasi unayoomba', lPosAtt: 'Idara au eneo la mafunzo (hiari)', lPosVol: 'Eneo la kujitolea (hiari)',
+      lSubject: 'Kichwa cha barua (YAHUSU, hiari)', phSubject: 'Acha wazi kutumia kichwa kinachotengenezwa kiotomatiki',
       lSource: 'Nafasi ilitangazwa wapi (hiari)', phSource: 'mf. kwenye tovuti ya Ajira Portal',
       lWhenJob: 'Utaanza kazi lini (hiari)', lWhenAtt: 'Kipindi cha mafunzo', lWhenVol: 'Muda wa kujitolea (hiari)', lDate: 'Tarehe ya barua',
 
@@ -101,6 +102,7 @@
       gRecipient: 'Who you are writing to', lRecTitle: 'Recipient title (optional)', phRec: 'The Human Resource Manager',
       lOrg: 'Organisation or company', lOrgAddr: 'Organisation address',
       lPosJob: 'Position you are applying for', lPosAtt: 'Department or area (optional)', lPosVol: 'Volunteer area (optional)',
+      lSubject: 'Letter subject (RE, optional)', phSubject: 'Leave blank to use the automatically generated subject',
       lSource: 'Where the vacancy was advertised (optional)', phSource: 'e.g. on the Ajira Portal',
       lWhenJob: 'When you can start (optional)', lWhenAtt: 'Attachment period', lWhenVol: 'Volunteer period (optional)', lDate: 'Letter date',
 

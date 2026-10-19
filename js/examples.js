@@ -30,7 +30,7 @@
       },
       letter: {
         type: 'job', recTitle: '', org: 'Kampuni ya Maendeleo Ltd', orgAddr: 'S.L.P 5678\nDodoma',
-        position: 'Afisa Rasilimali Watu', source: 'kwenye tovuti ya Ajira Portal', when: 'mara moja',
+        position: 'Afisa Rasilimali Watu', subject: '', source: 'kwenye tovuti ya Ajira Portal', when: 'mara moja',
         strengths: 'Ujuzi wa utunzaji wa kumbukumbu na taarifa za wafanyakazi\nUwezo wa kufanya kazi kwa timu na kwa muda uliopangwa\nMawasiliano mazuri ya kuandika na kuzungumza',
         why: ''
       }
@@ -60,7 +60,7 @@
       },
       letter: {
         type: 'job', recTitle: '', org: 'Maendeleo Company Ltd', orgAddr: 'P.O. Box 5678\nDodoma',
-        position: 'Human Resource Officer', source: 'on the Ajira Portal', when: 'immediately',
+        position: 'Human Resource Officer', subject: '', source: 'on the Ajira Portal', when: 'immediately',
         strengths: 'Records and staff data management skills\nAbility to work in a team and to deadlines\nGood written and spoken communication',
         why: ''
       }
@@ -78,7 +78,7 @@
         exp:  [{ role: '', org: '', period: '', points: '' }],
         refs: [{ name: '', title: '', phone: '', email: '' }]
       },
-      letter: { type: 'job', recTitle: '', org: '', orgAddr: '', position: '', source: '', when: '', strengths: '', why: '' }
+      letter: { type: 'job', recTitle: '', org: '', orgAddr: '', position: '', subject: '', source: '', when: '', strengths: '', why: '' }
     };
   }
 

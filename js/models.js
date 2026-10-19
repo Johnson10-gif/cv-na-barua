@@ -121,7 +121,7 @@
       date,
       recipient,
       salutation: D.dear(title),
-      subject: D.subj[l.type]((l.position || '').trim()),
+      subject: (l.subject || '').trim() || D.subj[l.type]((l.position || '').trim()),
       blocks: parseBody(l.body),
       closing: D.closing,
       name: (c.name || '').trim(),
