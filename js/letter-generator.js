@@ -26,6 +26,9 @@
     subjectGap: 10,
     paragraphGap: 10,
     listGap: 10,
+    paragraphIndent: 18,
+    paragraphIndentText: '    ',
+    paragraphIndentCss: '1.5em',
     senderCssGap: '0.35em',
     dateCssGap: '1em',
     recipientCssGap: '1em',
@@ -69,7 +72,7 @@
         : '';
 
       if (l.type === 'job') {
-        P.push('Kwa heshima na taadhima, naomba kuwasilisha maombi ya nafasi ya ' + (pos || 'kazi') +
+        P.push('Husika na kichwa cha habari tajwa hapo juu, naomba kuwasilisha maombi yangu ya nafasi ya ' + (pos || 'kazi') +
           (src ? ' kama ilivyotangazwa ' + src : '') + (org ? ' katika ' + org : '') + '.' + edu +
           ' Ninapenda kutumia ujuzi wangu kuchangia mafanikio ya ' + (org || 'taasisi yenu') + '.');
         if (st.length) P.push('Nguvu zangu kuu ni pamoja na:\n' + bullets(st));
@@ -83,7 +86,7 @@
           'Nimeambatisha wasifu wangu (CV) pamoja na nakala za vyeti vyangu. Nitafurahi kupata fursa ya usaili ili kujadili maombi yangu kwa kina. Asanteni kwa kuzingatia maombi haya.');
 
       } else if (l.type === 'attach') {
-        P.push('Kwa heshima na taadhima, naomba kuwasilisha maombi ya nafasi ya mafunzo kwa vitendo' +
+        P.push('Husika na kichwa cha habari tajwa hapo juu, naomba kuwasilisha maombi yangu ya nafasi ya mafunzo kwa vitendo' +
           (org ? ' katika ' + org : '') + (pos ? ', katika ' + pos : '') + (when ? ' kwa kipindi cha ' + when : '') + '.' +
           (qual || inst ? ' Mimi ni mwanafunzi' + (qual ? ' wa ' + qual : '') + (inst ? ' katika ' + inst : '') + '.' : ''));
         P.push('Mafunzo haya ni sehemu ya mtaala wangu na yatanipa fursa ya kutumia kwa vitendo ninachojifunza darasani.' +
@@ -93,7 +96,7 @@
         P.push('Nimeambatisha barua ya utambulisho kutoka chuoni, wasifu wangu (CV) na nakala ya kitambulisho cha mwanafunzi. Asanteni kwa kuzingatia maombi yangu.');
 
       } else {
-        P.push('Kwa heshima na taadhima, naomba kuwasilisha maombi ya kujitolea' + (org ? ' katika ' + org : '') +
+        P.push('Husika na kichwa cha habari tajwa hapo juu, naomba kuwasilisha maombi yangu ya kujitolea' + (org ? ' katika ' + org : '') +
           (pos ? ' katika eneo la ' + pos : '') + (when ? ' (' + when + ')' : '') + '.' + edu);
         if (st.length) P.push('Ninaweza kuchangia kupitia:\n' + bullets(st));
         P.push('Ninaamini kujitolea ni njia ya kuchangia jamii na kujenga uzoefu, na niko tayari kufuata maelekezo na kufanya kazi kwa bidii katika kipindi nitakachopangiwa.');
@@ -109,7 +112,7 @@
         : '';
 
       if (l.type === 'job') {
-        P.push('I am writing to apply for ' + (pos ? 'the position of ' + pos : 'the vacancy') +
+        P.push('With reference to the subject above, I am writing to apply for ' + (pos ? 'the position of ' + pos : 'the vacancy') +
           (src ? ', as advertised ' + src : '') + (org ? ' at ' + org : '') + '.' + eduE +
           ' I am eager to use my skills to contribute to the success of ' + (org || 'your organisation') + '.');
         if (st.length) P.push('My key strengths include:\n' + bullets(st));
@@ -123,7 +126,7 @@
           'I have attached my CV and copies of my certificates. I would welcome an interview to discuss my application in more detail. Thank you for considering it.');
 
       } else if (l.type === 'attach') {
-        P.push('I am writing to apply for a field attachment placement' + (org ? ' at ' + org : '') + (pos ? ' in ' + pos : '') +
+        P.push('With reference to the subject above, I am writing to apply for a field attachment placement' + (org ? ' at ' + org : '') + (pos ? ' in ' + pos : '') +
           (when ? ' for ' + when : '') + '.' +
           (qual || inst ? ' I am a student' + (qual ? ' of ' + qual : '') + (inst ? ' at ' + inst : '') + '.' : ''));
         P.push('This training is part of my study programme and will let me apply in practice what I have learnt in class.' +
@@ -133,7 +136,7 @@
         P.push('I have attached an introduction letter from my university, my CV and a copy of my student ID. Thank you for considering my application.');
 
       } else {
-        P.push('I am writing to apply to volunteer' + (org ? ' at ' + org : '') + (pos ? ' in ' + pos : '') +
+        P.push('With reference to the subject above, I am writing to apply to volunteer' + (org ? ' at ' + org : '') + (pos ? ' in ' + pos : '') +
           (when ? ' (' + when + ')' : '') + '.' + eduE);
         if (st.length) P.push('I can contribute through:\n' + bullets(st));
         P.push('I believe volunteering is a way to serve the community and build experience, and I am ready to follow guidance and work hard throughout the period assigned to me.');

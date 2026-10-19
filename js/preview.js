@@ -64,7 +64,7 @@
     m.blocks.forEach((b, i) => {
       const next = m.blocks[i + 1];
       if (b.type === 'p') {
-        h += '<p class="blk' + (next && next.type === 'ul' ? ' tight' : '') + '">' + b.lines.map(esc).join('<br>') + '</p>';
+        h += '<p class="blk' + (next && next.type === 'ul' ? ' tight' : '') + '">' + esc(b.lines.join(' ')) + '</p>';
       } else {
         h += '<ul class="blk">' + b.items.map(x => '<li>' + esc(x) + '</li>').join('') + '</ul>';
       }
@@ -91,6 +91,7 @@
       paper.style.setProperty('--letter-subject-top-gap', format.subjectCssTopGap);
       paper.style.setProperty('--letter-subject-bottom-gap', format.subjectCssBottomGap);
       paper.style.setProperty('--letter-paragraph-align', format.paragraphAlign);
+      paper.style.setProperty('--letter-paragraph-indent', format.paragraphIndentCss);
       paper.innerHTML = state.tab === 'cv' ? cvHtml() : letterHtml();
     });
   }

@@ -33,12 +33,13 @@
       doc.setFont(font, style);
       doc.setFontSize(size);
       doc.setTextColor(color[0], color[1], color[2]);
-      const ls = doc.splitTextToSize(String(s), w);
-      ls.forEach(l => {
+      const firstLineIndent = o.firstLineIndent || 0;
+      const ls = doc.splitTextToSize(String(s), Math.max(1, w - firstLineIndent));
+      ls.forEach((l, i) => {
         b.need(size * lh);
         if (o.align === 'center') doc.text(l, x + w / 2, b.y + size * 0.8, { align: 'center' });
         else if (o.align === 'right') doc.text(l, x + w, b.y + size * 0.8, { align: 'right' });
-        else doc.text(l, x, b.y + size * 0.8);
+        else doc.text(l, x + (i === 0 ? firstLineIndent : 0), b.y + size * 0.8);
         b.y += size * lh;
       });
       return ls;
@@ -204,7 +205,10 @@
     m.blocks.forEach((blk, i) => {
       const next = m.blocks[i + 1];
       if (blk.type === 'p') {
-        blk.lines.forEach(l => b.para(l, { size, font: f, lh: format.paragraphLineHeight }));
+        b.para(blk.lines.join(' '), {
+          size, font: f, lh: format.paragraphLineHeight,
+          firstLineIndent: format.paragraphIndent
+        });
         b.y += (next && next.type === 'ul') ? 3 : format.paragraphGap;
       } else {
         blk.items.forEach(x => b.bullet(x, { size, font: f, x: 6 }));

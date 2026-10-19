@@ -6,6 +6,7 @@
   'use strict';
 
   const { cvModel, letterModel } = CVB.models;
+  const { letterFormat } = CVB.letter;
 
   function cvText() {
     const m = cvModel(), out = [];
@@ -44,6 +45,7 @@
 
   function letterText() {
     const m = letterModel();
+    const format = letterFormat();
     let out = [];
 
     out = out.concat(m.sender);
@@ -52,7 +54,9 @@
     out.push('', m.salutation, '', m.subject, '');
 
     m.blocks.forEach(b => {
-      out.push(b.type === 'p' ? b.lines.join('\n') : b.items.map(x => '- ' + x).join('\n'));
+      out.push(b.type === 'p'
+        ? format.paragraphIndentText + b.lines.join(' ')
+        : b.items.map(x => '- ' + x).join('\n'));
       out.push('');
     });
 

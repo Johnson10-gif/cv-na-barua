@@ -58,7 +58,7 @@
 .lt .recipient{margin-bottom:var(--letter-recipient-gap,1em)}
 .lt .sub{font-weight:700;margin:var(--letter-subject-top-gap,1.2em) 0 var(--letter-subject-bottom-gap,1em)}
 .lt .sub.underlined{text-decoration:underline;text-underline-offset:.2em}
-.lt p.blk{text-align:var(--letter-paragraph-align,justify);text-justify:inter-word}
+.lt p.blk{text-align:var(--letter-paragraph-align,justify);text-indent:var(--letter-paragraph-indent,1.5em);text-justify:inter-word}
 .lt .sig{height:3.6em}
 .lt .encl{margin-top:2.2em;font-size:.92em}
 .lt .encl ul{margin-top:.2em}
