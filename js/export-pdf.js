@@ -14,6 +14,7 @@
   const { tr } = CVB.i18n;
   const { state } = CVB.store;
   const { cvModel, letterModel } = CVB.models;
+  const { letterFormat } = CVB.letter;
 
   /* ---- tiny layout helper: tracks the cursor (y) and starts new pages ---- */
   function pdfBuilder(doc, M) {
@@ -36,6 +37,7 @@
       ls.forEach(l => {
         b.need(size * lh);
         if (o.align === 'center') doc.text(l, x + w / 2, b.y + size * 0.8, { align: 'center' });
+        else if (o.align === 'right') doc.text(l, x + w, b.y + size * 0.8, { align: 'right' });
         else doc.text(l, x, b.y + size * 0.8);
         b.y += size * lh;
       });
@@ -163,23 +165,26 @@
   /* --------------------------- Letter --------------------------- */
   function pdfLetter(doc) {
     const m = letterModel(), modern = state.template === 'modern';
-    const b = pdfBuilder(doc, 64), M = b.M;
+    const format = letterFormat();
+    const b = pdfBuilder(doc, format.pdfMargin), M = b.M;
     const f = modern ? 'helvetica' : 'times';
-    const size = modern ? 10.5 : 11.5;
+    const size = modern ? format.modernFontSize : format.classicFontSize;
 
     // sender block, date, recipient, salutation
     m.sender.forEach((x, i) => b.para(x, {
       size, font: f, style: i === 0 ? 'bold' : 'normal',
-      color: i === 0 && modern ? hex(state.accent) : [22, 22, 22]
+      align: format.senderAlign,
+      color: [22, 22, 22]
     }));
-    b.y += 12; b.para(m.date, { size, font: f });
-    b.y += 12; m.recipient.forEach(x => b.para(x, { size, font: f }));
-    b.y += 12; b.para(m.salutation, { size, font: f });
-    b.y += 12;
+    b.y += format.addressGap; b.para(m.date, { size, font: f, align: format.dateAlign });
+    b.y += format.addressGap; m.recipient.forEach(x => b.para(x, { size, font: f, align: format.recipientAlign }));
+    b.y += format.addressGap; b.para(m.salutation, { size, font: f });
+    b.y += format.salutationGap;
 
     // subject line, bold and underlined
-    const sl = b.para(m.subject, { size, font: f, style: 'bold' });
+    const sl = b.para(m.subject, { size, font: f, style: 'bold', align: format.subjectAlign });
     (function underline() {
+      if (!format.subjectUnderline) return;
       const lh = size * 1.4, top = b.y - lh * sl.length;
       if (top < M - 1 || b.y > b.H - M + 1) return;   // subject crossed a page break: skip the underline
       doc.setDrawColor(22, 22, 22);
@@ -189,20 +194,21 @@
       sl.forEach((l, i) => {
         const w = doc.getTextWidth(l);
         const y2 = top + i * lh + size * 0.8 + 2;
-        doc.line(M, y2, M + w, y2);
+        const x = format.subjectAlign === 'center' ? M + (b.cw - w) / 2 : M;
+        doc.line(x, y2, x + w, y2);
       });
     })();
-    b.y += 10;
+    b.y += format.subjectGap;
 
     // body
     m.blocks.forEach((blk, i) => {
       const next = m.blocks[i + 1];
       if (blk.type === 'p') {
-        blk.lines.forEach(l => b.para(l, { size, font: f, lh: 1.45 }));
-        b.y += (next && next.type === 'ul') ? 3 : 10;
+        blk.lines.forEach(l => b.para(l, { size, font: f, lh: format.paragraphLineHeight }));
+        b.y += (next && next.type === 'ul') ? 3 : format.paragraphGap;
       } else {
         blk.items.forEach(x => b.bullet(x, { size, font: f, x: 6 }));
-        b.y += 10;
+        b.y += format.listGap;
       }
     });
 

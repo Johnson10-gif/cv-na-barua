@@ -5,7 +5,11 @@ Zana ya kutengeneza **wasifu (CV)** na **barua ya maombi** (ajira, mafunzo kwa v
 ## Jinsi ya kuifungua
 
 1. Fungua `index.html` kwenye browser (double-click inatosha).
-2. Au iweke kwenye hosting yoyote ya bure (GitHub Pages, Netlify, Vercel). Pakia folder lote kama lilivyo.
+2. Au iweke kwenye hosting yoyote ya bure (GitHub Pages, Netlify, Vercel).
+
+### Kuchapisha mabadiliko GitHub Pages
+
+Workflow ya `.github/workflows/pages.yml` huchapisha tovuti upya kila unapofanya `push` kwenda `main` au `master`. Kwenye GitHub, fungua **Settings → Pages** na uchague **GitHub Actions** kama build and deployment source. Baada ya hapo, weka mabadiliko yako kwa `commit` na `push`; mabadiliko ya faili kwenye kompyuta pekee hayaonekani kwa watu wengine mpaka uyasukume GitHub. Hali ya uchapishaji huonekana kwenye kichupo cha **Actions**, na link ya tovuti hupatikana kwenye **Settings → Pages**.
 
 Intaneti inahitajika kupakia fonti za Google na maktaba ya PDF (jsPDF). Kwa matumizi bila intaneti kabisa, pakua `jspdf.umd.min.js` kwenye folder `vendor/` na ubadilishe `src` yake kwenye `index.html`.
 

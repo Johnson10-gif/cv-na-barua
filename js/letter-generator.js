@@ -15,6 +15,32 @@
   const { state } = CVB.store;
 
   const bullets = arr => arr.map(x => '• ' + x).join('\n');
+  const LETTER_FORMAT = Object.freeze({
+    senderAlign: 'right',
+    dateAlign: 'right',
+    recipientAlign: 'left',
+    subjectAlign: 'center',
+    subjectUnderline: true,
+    addressGap: 12,
+    salutationGap: 12,
+    subjectGap: 10,
+    paragraphGap: 10,
+    listGap: 10,
+    senderCssGap: '0.35em',
+    dateCssGap: '1em',
+    recipientCssGap: '1em',
+    subjectCssTopGap: '1.2em',
+    subjectCssBottomGap: '1em',
+    paragraphAlign: 'justify',
+    pdfMargin: 64,
+    modernFontSize: 10.5,
+    classicFontSize: 11.5,
+    paragraphLineHeight: 1.45
+  });
+
+  function letterFormat() {
+    return LETTER_FORMAT;
+  }
 
   function genBody() {
     const L = state.lang, c = state.cv, l = state.letter;
@@ -147,5 +173,5 @@
       '. Hardworking, disciplined and eager to learn, with the ability to work independently and as part of a team.';
   }
 
-  CVB.letter = { genBody, syncBody, suggestSummary };
+  CVB.letter = { genBody, syncBody, suggestSummary, letterFormat };
 })();

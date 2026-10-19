@@ -15,21 +15,21 @@
 .paper p{margin:0}
 .paper ul{margin:.3em 0 0;padding-left:1.3em}
 .paper li{margin:.12em 0}
-.paper .empty{color:#9a9a9a}
+.paper .empty{color:var(--ink)}
 
 /* ---------- CV content ---------- */
-.cv .kicker{font-size:.78em;letter-spacing:.2em;color:#6b6b6b;margin-bottom:.5em}
+.cv .kicker{font-size:.78em;letter-spacing:.2em;color:var(--ink);margin-bottom:.5em}
 .cv .nm{margin:0;font-size:2.35em;line-height:1.1;font-weight:700}
 .cv .rl{margin-top:.35em;font-size:1.12em}
-.cv .contacts{margin-top:.7em;display:flex;flex-wrap:wrap;gap:.1em .9em;font-size:.95em;color:#333}
-.cv .contacts span+span::before{content:"|";margin-right:.9em;color:#aaa}
-.cv .details{margin-top:.25em;font-size:.92em;color:#555}
+.cv .contacts{margin-top:.7em;display:flex;flex-wrap:wrap;gap:.1em .9em;font-size:.95em;color:var(--ink)}
+.cv .contacts span+span::before{content:"|";margin-right:.9em;color:var(--ink)}
+.cv .details{margin-top:.25em;font-size:.92em;color:var(--ink)}
 .cv h3{margin:1.5em 0 .6em;font-size:.88em;letter-spacing:.14em;text-transform:uppercase;font-weight:700;padding-bottom:.28em}
 .cv .ent{margin:0 0 .85em}
 .cv .eh{display:flex;justify-content:space-between;gap:1em;flex-wrap:wrap}
 .cv .eh b{font-weight:600}
-.cv .pr{font-size:.93em;color:#555;font-variant-numeric:tabular-nums}
-.cv .es{font-style:italic;color:#444}
+.cv .pr{font-size:.93em;color:var(--ink);font-variant-numeric:tabular-nums}
+.cv .es{font-style:italic;color:var(--ink)}
 .cv .refs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.8em 1.6em}
 .cv .rf div{font-size:.95em;color:#333}
 .cv .rf b{font-weight:600}
@@ -43,14 +43,22 @@
 
 /* ---------- Template: Modern (sans, left aligned, accent colour) ---------- */
 .t-modern{font-family:var(--font-ui)}
-.t-modern .nm{color:var(--doc-accent)}
-.t-modern h3{color:var(--doc-accent);border-bottom:2px solid var(--doc-accent)}
+.t-modern .nm{color:var(--ink)}
+.t-modern h3{color:var(--ink);border-bottom:2px solid var(--doc-accent)}
 .t-modern .rl{font-weight:600}
 
 /* ---------- Letter content ---------- */
 .lt .blk{margin:0 0 1em}
 .lt .blk.tight{margin-bottom:.35em}
-.lt .sub{font-weight:700;text-decoration:underline;text-underline-offset:.2em;margin:1.2em 0 1em}
+.lt .align-left{text-align:left}
+.lt .align-right{text-align:right}
+.lt .align-center{text-align:center}
+.lt .sender{margin-bottom:var(--letter-sender-gap,.35em)}
+.lt .letter-date{margin-bottom:var(--letter-date-gap,1em)}
+.lt .recipient{margin-bottom:var(--letter-recipient-gap,1em)}
+.lt .sub{font-weight:700;margin:var(--letter-subject-top-gap,1.2em) 0 var(--letter-subject-bottom-gap,1em)}
+.lt .sub.underlined{text-decoration:underline;text-underline-offset:.2em}
+.lt p.blk{text-align:var(--letter-paragraph-align,justify);text-justify:inter-word}
 .lt .sig{height:3.6em}
 .lt .encl{margin-top:2.2em;font-size:.92em}
 .lt .encl ul{margin-top:.2em}

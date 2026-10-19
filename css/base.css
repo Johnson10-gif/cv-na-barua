@@ -1,22 +1,22 @@
 /* base.css
-   Design tokens (light + dark), reset and global typography.
+  Design tokens, reset and global typography.
    Every colour used in the app comes from a token defined here. */
 
 :root{
   color-scheme:light;
 
   /* surfaces and text */
-  --bg:#F2F5F2;
-  --surface:#FFFFFF;
-  --fg:#16201B;
-  --muted:#58675F;
-  --line:#D7DFD9;
+  --bg:#FFFFFF;
+  --surface:#F1F8F3;
+  --fg:#000000;
+  --muted:#000000;
+  --line:#B9D5C2;
 
   /* brand */
-  --accent:#0F5C4A;
-  --accent-fg:#FFFFFF;
-  --accent-soft:#E0EEE8;
-  --danger:#A3321F;
+  --accent:#2E8B57;
+  --accent-fg:#000000;
+  --accent-soft:#E2F1E7;
+  --danger:#000000;
 
   /* type */
   --font-ui:'Instrument Sans',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;
@@ -24,21 +24,7 @@
 
   /* the printed sheet stays white with dark ink in both themes */
   --paper:#FFFFFF;
-  --ink:#161616;
-}
-
-/* Dark: follows the system unless the page forces a theme with data-theme */
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    color-scheme:dark;
-    --bg:#0E1512; --surface:#16201B; --fg:#E7EEE9; --muted:#97A79E; --line:#2B3831;
-    --accent:#5FC3A5; --accent-fg:#06231A; --accent-soft:#1A2D26; --danger:#F08A76;
-  }
-}
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#0E1512; --surface:#16201B; --fg:#E7EEE9; --muted:#97A79E; --line:#2B3831;
-  --accent:#5FC3A5; --accent-fg:#06231A; --accent-soft:#1A2D26; --danger:#F08A76;
+  --ink:#000000;
 }
 
 *{box-sizing:border-box}

@@ -50,15 +50,16 @@
 
   function letterHtml() {
     const m = letterModel();
+    const format = CVB.letter.letterFormat();
     let h = '';
 
     if (m.sender.length) {
-      h += '<div class="blk">' + m.sender.map((x, i) => '<div>' + (i === 0 ? '<b>' + esc(x) + '</b>' : esc(x)) + '</div>').join('') + '</div>';
+      h += '<div class="blk sender align-' + format.senderAlign + '">' + m.sender.map((x, i) => '<div>' + (i === 0 ? '<b>' + esc(x) + '</b>' : esc(x)) + '</div>').join('') + '</div>';
     }
-    h += '<div class="blk">' + esc(m.date) + '</div>';
-    h += '<div class="blk">' + m.recipient.map(x => '<div>' + esc(x) + '</div>').join('') + '</div>';
+    h += '<div class="blk letter-date align-' + format.dateAlign + '">' + esc(m.date) + '</div>';
+    h += '<div class="blk recipient align-' + format.recipientAlign + '">' + m.recipient.map(x => '<div>' + esc(x) + '</div>').join('') + '</div>';
     h += '<div class="blk">' + esc(m.salutation) + '</div>';
-    h += '<div class="sub">' + esc(m.subject) + '</div>';
+    h += '<div class="sub align-' + format.subjectAlign + (format.subjectUnderline ? ' underlined' : '') + '">' + esc(m.subject) + '</div>';
 
     m.blocks.forEach((b, i) => {
       const next = m.blocks[i + 1];
@@ -81,8 +82,15 @@
     cancelAnimationFrame(frame);
     frame = requestAnimationFrame(() => {
       const paper = $('#paper');
+      const format = CVB.letter.letterFormat();
       paper.className = 'paper ' + (state.tab === 'cv' ? 'cv ' : 'lt ') + 't-' + state.template;
       paper.style.setProperty('--doc-accent', state.accent);
+      paper.style.setProperty('--letter-sender-gap', format.senderCssGap);
+      paper.style.setProperty('--letter-date-gap', format.dateCssGap);
+      paper.style.setProperty('--letter-recipient-gap', format.recipientCssGap);
+      paper.style.setProperty('--letter-subject-top-gap', format.subjectCssTopGap);
+      paper.style.setProperty('--letter-subject-bottom-gap', format.subjectCssBottomGap);
+      paper.style.setProperty('--letter-paragraph-align', format.paragraphAlign);
       paper.innerHTML = state.tab === 'cv' ? cvHtml() : letterHtml();
     });
   }
