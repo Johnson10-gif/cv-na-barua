@@ -11,6 +11,10 @@ Zana ya kutengeneza **wasifu (CV)** na **barua ya maombi** (ajira, mafunzo kwa v
 
 Workflow ya `.github/workflows/pages.yml` huchapisha tovuti upya kila unapofanya `push` kwenda `main` au `master`. Kwenye GitHub, fungua **Settings → Pages** na uchague **GitHub Actions** kama build and deployment source. Baada ya hapo, weka mabadiliko yako kwa `commit` na `push`; mabadiliko ya faili kwenye kompyuta pekee hayaonekani kwa watu wengine mpaka uyasukume GitHub. Hali ya uchapishaji huonekana kwenye kichupo cha **Actions**, na link ya tovuti hupatikana kwenye **Settings → Pages**.
 
+### Google Search na SEO
+
+SEO metadata, `robots.txt` na `sitemap.xml` vimewekwa kwa GitHub Pages. Fuata [SEO_GUIDE.md](SEO_GUIDE.md) kusajili tovuti kwenye Google Search Console, kuthibitisha umiliki, kuwasilisha sitemap na kuomba indexing.
+
 Intaneti inahitajika kupakia fonti za Google na maktaba ya PDF (jsPDF). Kwa matumizi bila intaneti kabisa, pakua `jspdf.umd.min.js` kwenye folder `vendor/` na ubadilishe `src` yake kwenye `index.html`.
 
 ## Mpangilio wa folder

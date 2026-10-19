@@ -32,6 +32,7 @@ jobs:
           mkdir _site
           cp index.html _site/
           cp -r css js _site/
+          cp robots.txt sitemap.xml _site/
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3

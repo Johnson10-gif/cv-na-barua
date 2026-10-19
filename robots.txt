@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://johnson10-gif.github.io/cv-na-barua/sitemap.xml
