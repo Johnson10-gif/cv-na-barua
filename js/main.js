@@ -13,7 +13,29 @@
   const { syncBody, suggestSummary } = CVB.letter;
   const { renderPreview } = CVB.preview;
   const ui = CVB.ui;
-  const { doPdf, doCopy, getDownloader } = CVB.actions;
+  const { doPdf, doCombinedPrint, doCopy, getDownloader } = CVB.actions;
+
+  $('#f-attachments').addEventListener('change', async e => {
+    const input = e.target;
+    const files = Array.from(input.files || []);
+    const allowed = ['application/pdf', 'image/jpeg', 'image/png'];
+
+    try {
+      let existing = await CVB.attachments.list();
+      for (const file of files) {
+        if (!allowed.includes(file.type)) { ui.toast(tr().attachmentTypeFail); continue; }
+        if (file.size > 15 * 1024 * 1024) { ui.toast(tr().attachmentSizeFail); continue; }
+        if (existing.length >= 10) { ui.toast(tr().attachmentMaxFail); break; }
+        await CVB.attachments.add(file);
+        existing = await CVB.attachments.list();
+        ui.toast(tr().attachmentAdded);
+      }
+    } catch (err) {
+      ui.toast(tr().attachmentDbFail);
+    }
+    input.value = '';
+    ui.renderAttachments();
+  });
 
   /* ---------- typing in any form field ---------- */
   $('#edit').addEventListener('input', e => {
@@ -37,6 +59,13 @@
   document.addEventListener('click', e => {
     const el = e.target.closest('button');
     if (!el) return;
+
+    if (el.dataset.removeAttachment) {
+      CVB.attachments.remove(el.dataset.removeAttachment)
+        .then(() => ui.renderAttachments())
+        .catch(() => ui.toast(tr().attachmentDbFail));
+      return;
+    }
 
     // language toggle
     if (el.dataset.lang) {
@@ -125,6 +154,8 @@
     // preview toolbar
     } else if (el.id === 'btnPdf') {
       doPdf();
+    } else if (el.id === 'btnCombined') {
+      doCombinedPrint();
     } else if (el.id === 'btnCopy') {
       doCopy();
 

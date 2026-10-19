@@ -76,6 +76,19 @@
     });
   }
 
+  async function renderAttachments() {
+    const list = $('#attachmentList');
+    try {
+      const files = await CVB.attachments.list();
+      list.innerHTML = files.length ? files.map(file =>
+        '<li><span>' + esc(file.name) + ' <small>(' + (file.size / 1048576).toFixed(1) + ' MB)</small></span>' +
+        '<button type="button" class="btn sm rm" data-remove-attachment="' + file.id + '">' + esc(tr().attachmentRemove) + '</button></li>'
+      ).join('') : '<li class="attachment-empty">' + esc(tr().attachmentEmpty) + '</li>';
+    } catch (e) {
+      list.innerHTML = '<li class="attachment-empty">' + esc(tr().attachmentDbFail) + '</li>';
+    }
+  }
+
   // put state values into the fixed form fields (anything with data-k="path")
   function fillStatic() {
     $$('[data-k]').forEach(el => {
@@ -95,6 +108,7 @@
     $('#btnSuggest').textContent = t.btnSuggest;
     applyType();
     renderLists();
+    renderAttachments();
     renderSwatches();
     applyPane();
   }
@@ -150,5 +164,5 @@
     save();
   }
 
-  CVB.ui = { toast, LISTS, renderLists, fillStatic, applyLang, applyType, renderSwatches, applyTab, applyPane, applyExample, refreshAll, update };
+  CVB.ui = { toast, LISTS, renderLists, renderAttachments, fillStatic, applyLang, applyType, renderSwatches, applyTab, applyPane, applyExample, refreshAll, update };
 })();

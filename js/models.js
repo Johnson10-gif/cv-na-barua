@@ -15,6 +15,11 @@
   const { DOC } = CVB.i18n;
   const { state } = CVB.store;
 
+  function punctuatedLines(value) {
+    const parts = String(value || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean);
+    return parts.map((line, i) => line.replace(/[.,;:]+$/, '') + (i === parts.length - 1 ? '.' : ','));
+  }
+
   // "2026-10-18" -> "18 Oktoba 2026" / "18 October 2026"
   function fmtDate(iso) {
     let d = iso ? iso.split('-') : null;
@@ -36,7 +41,7 @@
 
     const edu = c.edu
       .filter(e => e.inst || e.qual || e.period || e.note)
-      .map(e => ({ head: e.qual || e.inst, right: e.period || '', sub: e.qual ? e.inst : '', bullets: lines(e.note) }));
+      .map(e => ({ qualification: e.qual, institution: e.inst, period: e.period, details: e.note }));
 
     const exp = c.exp
       .filter(x => x.role || x.org || x.period || x.points)
@@ -55,7 +60,7 @@
     if ((c.summary || '').trim()) sections.push({ kind: 'text', title: D.hProfile, text: c.summary.trim() });
 
     // experience first when there is some, otherwise education first
-    const E = edu.length ? { kind: 'entries', title: D.hEdu, items: edu } : null;
+    const E = edu.length ? { kind: 'education', title: D.hEdu, items: edu } : null;
     const X = exp.length ? { kind: 'entries', title: D.hExp, items: exp } : null;
     (exp.length ? [X, E] : [E, X]).forEach(s => { if (s) sections.push(s); });
 
@@ -97,12 +102,15 @@
   function letterModel() {
     const c = state.cv, l = state.letter, D = DOC[state.lang];
 
-    const sender = [c.name, c.address, c.phone, c.email].map(x => (x || '').trim()).filter(Boolean);
+    const contactLine = [c.phone ? D.tel + ': ' + c.phone.trim() : '', c.email ? D.mail + ': ' + c.email.trim() : '']
+      .filter(Boolean).join(', ');
+    const sender = [(c.name || '').trim()]
+      .concat(punctuatedLines(c.address))
+      .concat(contactLine ? [contactLine + '.'] : [])
+      .filter(Boolean);
 
     const title = (l.recTitle || '').trim() || D.defTitle;
-    const recipient = [title]
-      .concat((l.org || '').trim() ? [l.org.trim()] : [])
-      .concat(String(l.orgAddr || '').split(/\r?\n/).map(x => x.trim()).filter(Boolean));
+    const recipient = punctuatedLines([title, (l.org || '').trim(), l.orgAddr || ''].filter(Boolean).join('\n'));
 
     return {
       sender,

@@ -5,9 +5,10 @@
   'use strict';
 
   const { tr } = CVB.i18n;
+  const { slug } = CVB.utils;
   const { state } = CVB.store;
   const { toast } = CVB.ui;
-  const { createPdf, pdfFileName } = CVB.exportPdf;
+  const { createPdf, createCombinedPdf, pdfFileName } = CVB.exportPdf;
   const { cvText, letterText } = CVB.exportText;
 
   /* Inside claude.ai the page must use the "downloads" capability to save a file.
@@ -42,6 +43,35 @@
     }
   }
 
+  async function doCombinedPrint() {
+    const t = tr();
+    const printTab = window.claude ? null : window.open('about:blank', '_blank');
+    try {
+      const downloader = await getDownloader();
+      if (window.claude && !downloader) { toast(t.noDl); return; }
+
+      const bytes = await createCombinedPdf();
+      const blob = new Blob([bytes], { type: 'application/pdf' });
+      const filename = 'Maombi_' + (slug(state.cv.name) || 'Jina') + '.pdf';
+      if (downloader) {
+        await downloader.save({ filename, data: blob });
+        toast(t.pdfDone);
+      } else if (printTab) {
+        printTab.location.href = URL.createObjectURL(blob);
+        toast(t.combinedReady);
+      } else {
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+        link.click();
+        toast(t.pdfDone);
+      }
+    } catch (e) {
+      if (printTab) printTab.close();
+      toast(t.combinedFail);
+    }
+  }
+
   async function doCopy() {
     const t = tr();
     const text = state.tab === 'cv' ? cvText() : letterText();
@@ -66,5 +96,5 @@
     }
   }
 
-  CVB.actions = { getDownloader, doPdf, doCopy };
+  CVB.actions = { getDownloader, doPdf, doCombinedPrint, doCopy };
 })();

@@ -31,6 +31,10 @@
           it.bullets.forEach(b => out.push('- ' + b));
           out.push('');
         });
+      } else if (s.kind === 'education') {
+        s.items.forEach(it => {
+          out.push([it.qualification, it.institution, it.period, it.details].filter(Boolean).join(' | '));
+        });
       } else if (s.kind === 'refs') {
         s.items.forEach(r => {
           out.push([r.name, r.title].filter(Boolean).join(', '));

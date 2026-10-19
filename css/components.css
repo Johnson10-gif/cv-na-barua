@@ -41,6 +41,9 @@
 /* repeatable items (education, experience, referees) */
 .item{border:1px solid var(--line);border-radius:10px;padding:12px;display:flex;flex-direction:column;gap:10px;background:color-mix(in srgb,var(--bg) 55%,var(--surface))}
 .item-h{display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:700;color:var(--muted)}
+.attachment-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.attachment-list li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px;border:1px solid var(--line);background:var(--bg);border-radius:8px;overflow-wrap:anywhere}
+.attachment-list small,.attachment-empty{color:var(--muted)}
 
 /* accent colour swatches (Modern template) */
 .swatches{display:flex;gap:10px;align-items:center;flex-wrap:wrap}

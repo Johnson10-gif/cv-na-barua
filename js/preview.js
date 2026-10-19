@@ -37,6 +37,15 @@
           h += '</div>';
         });
 
+      } else if (s.kind === 'education') {
+        h += '<div class="edu-table-wrap"><table class="edu-table"><thead><tr>' +
+          '<th>' + esc(t.eduQual) + '</th><th>' + esc(t.eduInst) + '</th>' +
+          '<th>' + esc(t.eduPeriod) + '</th><th>' + esc(t.eduNote) + '</th>' +
+          '</tr></thead><tbody>' + s.items.map(it => '<tr>' +
+            '<td>' + esc(it.qualification) + '</td><td>' + esc(it.institution) + '</td>' +
+            '<td>' + esc(it.period) + '</td><td>' + esc(it.details) + '</td>' +
+          '</tr>').join('') + '</tbody></table></div>';
+
       } else if (s.kind === 'refs') {
         h += '<div class="refs">' + s.items.map(r =>
           '<div class="rf">' + (r.name ? '<b>' + esc(r.name) + '</b>' : '') +

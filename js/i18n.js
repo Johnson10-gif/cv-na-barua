@@ -52,6 +52,14 @@
 
       gBody: 'Maandishi ya barua', hBody: 'Unaweza kuhariri maandishi moja kwa moja', btnRegen: 'Tengeneza upya',
       hDirty: 'Umehariri maandishi mwenyewe, kwa hiyo mabadiliko ya fomu hayabadilishi maandishi haya. Bonyeza Tengeneza upya kuanza tena.',
+      gAttachments: 'Viambatisho vya barua', attachmentUpload: 'Pakia nyaraka za kuambatisha (PDF, JPG au PNG)',
+      attachmentHint: 'Nyaraka huhifadhiwa kwenye kifaa hiki. Pakia hadi 10, kila moja isizidi MB 15. Word: ihifadhi kama PDF kwanza.',
+      attachmentEmpty: 'Bado hujapakia kiambatisho.', attachmentRemove: 'Ondoa',
+      attachmentAdded: 'Kiambatisho kimehifadhiwa kwenye kifaa hiki.',
+      attachmentTypeFail: 'Tumia PDF, JPG au PNG pekee.', attachmentSizeFail: 'Kila faili lazima iwe chini ya MB 15.',
+      attachmentMaxFail: 'Umefikia kikomo cha viambatisho 10.', attachmentDbFail: 'Imeshindwa kuhifadhi kiambatisho.',
+      printCombined: 'Chapisha CV, barua na viambatisho', combinedReady: 'PDF ya pamoja imefunguliwa kwa uchapishaji.',
+      combinedFail: 'Imeshindwa kuunganisha nyaraka. Hakikisha PDF zako hazijalindwa kwa nenosiri.',
 
       dlPdf: 'Pakua PDF', copy: 'Nakili maandishi', copied: 'Maandishi yamenakiliwa',
       copyFail: 'Imeshindwa kunakili. Chagua maandishi mwenyewe.', pdfDone: 'PDF imehifadhiwa',
@@ -101,6 +109,14 @@
 
       gBody: 'Letter text', hBody: 'You can edit the text directly', btnRegen: 'Regenerate',
       hDirty: 'You edited the text yourself, so form changes no longer update it. Click Regenerate to start again.',
+      gAttachments: 'Letter attachments', attachmentUpload: 'Upload supporting documents (PDF, JPG or PNG)',
+      attachmentHint: 'Files stay on this device. Upload up to 10 files, each up to 15 MB. Save Word documents as PDF first.',
+      attachmentEmpty: 'No attachments uploaded yet.', attachmentRemove: 'Remove',
+      attachmentAdded: 'Attachment saved on this device.',
+      attachmentTypeFail: 'Use PDF, JPG or PNG files only.', attachmentSizeFail: 'Each file must be 15 MB or smaller.',
+      attachmentMaxFail: 'You have reached the 10-attachment limit.', attachmentDbFail: 'Could not save the attachment.',
+      printCombined: 'Print CV, letter and attachments', combinedReady: 'Combined PDF opened for printing.',
+      combinedFail: 'Could not combine the documents. Check that PDFs are not password-protected.',
 
       dlPdf: 'Download PDF', copy: 'Copy text', copied: 'Text copied',
       copyFail: 'Could not copy. Select the text yourself.', pdfDone: 'PDF saved',

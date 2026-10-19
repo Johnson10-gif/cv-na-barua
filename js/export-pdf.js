@@ -69,6 +69,7 @@
   /* ---------------------------- CV ---------------------------- */
   function pdfCv(doc) {
     const m = cvModel(), modern = state.template === 'modern';
+    const labels = tr();
     const b = pdfBuilder(doc, 50), M = b.M, cw = b.cw, W = b.W;
     const acc = modern ? hex(state.accent) : [22, 22, 22];
     const f = modern ? 'helvetica' : 'times';
@@ -98,11 +99,58 @@
       b.y += 8;
     }
 
+    function educationTable(items) {
+      const widths = [cw * 0.29, cw * 0.27, cw * 0.15, cw * 0.29];
+      const headers = [labels.eduQual, labels.eduInst, labels.eduPeriod, labels.eduNote];
+      const pad = 5, lineH = 10, headerH = 25;
+
+      function row(cells, isHeader, index) {
+        const fontSize = isHeader ? 7.5 : 8.5;
+        const wrapped = cells.map((value, i) => {
+          doc.setFont(f, isHeader ? 'bold' : 'normal');
+          doc.setFontSize(fontSize);
+          return doc.splitTextToSize(String(value || ''), widths[i] - pad * 2);
+        });
+        const height = isHeader ? headerH : Math.max(1, ...wrapped.map(lines => lines.length)) * lineH + pad * 2;
+        const pageBefore = doc.getNumberOfPages();
+        b.need(height + (isHeader ? 0 : headerH));
+        if (!isHeader && doc.getNumberOfPages() !== pageBefore) row(headers, true, 0);
+        if (isHeader) {
+          doc.setFillColor(226, 241, 231);
+        } else if (index % 2 === 0) {
+          doc.setFillColor(247, 251, 248);
+        } else {
+          doc.setFillColor(255, 255, 255);
+        }
+        doc.setDrawColor(185, 213, 194);
+        doc.setLineWidth(0.5);
+        let x = M;
+        widths.forEach((width, i) => {
+          doc.rect(x, b.y, width, height, 'FD');
+          doc.setFont(f, isHeader ? 'bold' : 'normal');
+          doc.setFontSize(fontSize);
+          doc.setTextColor(0, 0, 0);
+          wrapped[i].forEach((line, j) => doc.text(line, x + pad, b.y + pad + fontSize * 0.8 + j * lineH));
+          x += width;
+        });
+        b.y += height;
+      }
+
+      row(headers, true, 0);
+      items.forEach((item, index) => row([
+        item.qualification, item.institution, item.period, item.details
+      ], false, index));
+      b.y += 8;
+    }
+
     m.sections.forEach(s => {
       heading(s.title);
 
       if (s.kind === 'text') {
         b.para(s.text, { size: 10, font: f });
+
+      } else if (s.kind === 'education') {
+        educationTable(s.items);
 
       } else if (s.kind === 'bullets') {
         s.items.forEach(i => b.bullet(i, { font: f }));
@@ -236,11 +284,54 @@
     return doc;
   }
 
+  async function createCombinedPdf() {
+    const pdfLib = window.PDFLib;
+    if (!pdfLib || !pdfLib.PDFDocument) throw new Error('PDF merging library is not loaded');
+
+    const cvDoc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4', compress: true });
+    const letterDoc = new window.jspdf.jsPDF({ unit: 'pt', format: 'a4', compress: true });
+    pdfCv(cvDoc);
+    pdfLetter(letterDoc);
+
+    const combined = await pdfLib.PDFDocument.create();
+    for (const source of [cvDoc, letterDoc]) {
+      const loaded = await pdfLib.PDFDocument.load(source.output('arraybuffer'));
+      const pages = await combined.copyPages(loaded, loaded.getPageIndices());
+      pages.forEach(page => combined.addPage(page));
+    }
+
+    const files = await CVB.attachments.list();
+    if (files.length) {
+      const divider = combined.addPage([595.28, 841.89]);
+      const heading = state.lang === 'sw' ? 'VIAMBATISHO' : 'ATTACHMENTS';
+      divider.drawText(heading, { x: 56, y: 750, size: 18, color: pdfLib.rgb(0, 0, 0) });
+      divider.drawLine({ start: { x: 56, y: 735 }, end: { x: 539, y: 735 }, thickness: 1, color: pdfLib.rgb(0.18, 0.55, 0.34) });
+
+      for (const item of files) {
+        const bytes = await item.file.arrayBuffer();
+        if (item.type === 'application/pdf') {
+          const source = await pdfLib.PDFDocument.load(bytes);
+          const pages = await combined.copyPages(source, source.getPageIndices());
+          pages.forEach(page => combined.addPage(page));
+        } else if (item.type === 'image/jpeg' || item.type === 'image/png') {
+          const image = item.type === 'image/jpeg' ? await combined.embedJpg(bytes) : await combined.embedPng(bytes);
+          const page = combined.addPage([595.28, 841.89]);
+          const maxWidth = 483, maxHeight = 729;
+          const scale = Math.min(maxWidth / image.width, maxHeight / image.height, 1);
+          const width = image.width * scale, height = image.height * scale;
+          page.drawImage(image, { x: (595.28 - width) / 2, y: (841.89 - height) / 2, width, height });
+        }
+      }
+    }
+
+    return combined.save();
+  }
+
   function pdfFileName() {
     const who = slug(state.cv.name) || 'Jina';
     const kind = state.tab === 'cv' ? 'CV' : (state.lang === 'sw' ? 'Barua' : 'Cover-letter');
     return kind + '_' + who + '.pdf';
   }
 
-  CVB.exportPdf = { createPdf, pdfFileName };
+  CVB.exportPdf = { createPdf, createCombinedPdf, pdfFileName };
 })();
