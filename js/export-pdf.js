@@ -115,18 +115,14 @@
         const pageBefore = doc.getNumberOfPages();
         b.need(height + (isHeader ? 0 : headerH));
         if (!isHeader && doc.getNumberOfPages() !== pageBefore) row(headers, true, 0);
-        if (isHeader) {
-          doc.setFillColor(226, 241, 231);
-        } else if (index % 2 === 0) {
-          doc.setFillColor(247, 251, 248);
-        } else {
-          doc.setFillColor(255, 255, 255);
-        }
-        doc.setDrawColor(185, 213, 194);
-        doc.setLineWidth(0.5);
+        const fill = isHeader ? [226, 241, 231] : index % 2 === 0 ? [247, 251, 248] : [255, 255, 255];
         let x = M;
         widths.forEach((width, i) => {
-          doc.rect(x, b.y, width, height, 'FD');
+          doc.setFillColor(fill[0], fill[1], fill[2]);
+          doc.rect(x, b.y, width, height, 'F');
+          doc.setDrawColor(185, 213, 194);
+          doc.setLineWidth(0.5);
+          doc.rect(x, b.y, width, height, 'S');
           doc.setFont(f, isHeader ? 'bold' : 'normal');
           doc.setFontSize(fontSize);
           doc.setTextColor(0, 0, 0);
